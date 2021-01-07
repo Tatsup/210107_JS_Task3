@@ -4,10 +4,28 @@
   <meta charaset="UTF-8">
   <title>ToDoList</title>
   <style>
+    body {font-family: "ＭＳ Ｐ明朝","ＭＳ 明朝",serif;}
   </style>
 </head>
 <body>
   <h1>ToDoリスト</h1>
+  <br>
+  <input type="radio" name="status" value="all">すべて
+  <input type="radio" name="status" value="work">作業中
+  <input type="radio" name="status" value="complete">完了
+  <table id="table">
+    <tr align="left">
+      <th>ID</th>
+      <th>コメント</th>
+      <th>状態</th>
+    </tr>
+  </table>
+  <br>
+  <h2>新規タスクの追加</h2>
+  <form>
+    <input id="comment" type="text">
+    <button>追加</button>
+  </form>
 
   <script src="js/main.js"></script>
 </body>
