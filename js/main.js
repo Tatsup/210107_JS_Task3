@@ -1,9 +1,7 @@
 'use strict';
 {
   const table = document.getElementById('table'); // 入力テキストの出力位置取得
-  const defaultTableHtml = table.innerHTML; // 初期のテーブルを記憶
-
-  let ary = [];
+  const ary = [];
 
   // ボタン生成の関数を定義
   function createBottun(textButton) {
@@ -13,35 +11,37 @@
     return button;
   };
 
-  // 追加ボタンClickでToDoの追加・表示
+  // ToDoの追加
+  function addToDo(text) {
+    const td = document.createElement('td') // 要素ノードtdを作成
+    const textNode = document.createTextNode(text); // テキストノードを作成
+    td.appendChild(textNode); // ノード同士の組み立て
+    return td;
+  };
+
+  // 追加ボタンClickで「作業中」「削除」ボタン・ToDo表示
   document.querySelector('form').addEventListener('submit', e => {
     e.preventDefault(); // ページ遷移（Defaultに戻る）をキャンセル
-    let comment = document.getElementById('comment'); // 入力テキストの要素ノードを変数に保管
+    const comment = document.getElementById('comment'); // 入力テキストの要素ノードを変数に保管
     
     if (comment.value) { // 入力テキストに文字があった場合
-      table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
+      table.innerHTML = ''; // テーブルを空状態に戻す
       const obj = {
-        "コメント": comment.value,
-        "状態": "作業中"
+        content: comment.value,
+        status: "作業中"
       };      
       ary.push(obj); // aryにobjを追加
 
       // 表示するノードを組み立て
-      for (let i = 0; i < ary.length; i++) {
-
+      ary.forEach(function (value, i) {
+      // for (let i = 0; i < ary.length; i++) {
         const tr = document.createElement('tr'); // テーブルの行要素ノードtrを作成
 
         // IDの要素ノードをtrに追加
-        const tdId = document.createElement('td'); // IDの要素ノードを作成
-        const textId = document.createTextNode(i); // テキストノードを作成
-        tdId.appendChild(textId); // ノード同士の組み立て
-        tr.appendChild(tdId); // trにIDを追加
+        tr.appendChild(addToDo(i)); // trにIDを追加
 
         // コメントの要素ノードをtrに追加
-        const tdComment = document.createElement('td'); // 入力テキストの要素ノードを作成
-        const textComment = document.createTextNode(ary[i]['コメント']); // テキストノードを作成
-        tdComment.appendChild(textComment); // ノード同士の組み立て
-        tr.appendChild(tdComment); // trにコメントを追加
+        tr.appendChild(addToDo(value.content)); // trにコメントを追加
 
         // 状態ノードtrを作成
         const tdStatus = document.createElement('td'); // 状態の要素ノードを作成
@@ -53,10 +53,10 @@
 
         // 作成した行ノードtrをテーブルTABLEに追加
         table.appendChild(tr);
-      }
+      });
 
       // 入力テキストを空にする
       comment.value = '';
-    }
+    };
   });
 }
