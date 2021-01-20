@@ -32,12 +32,12 @@
 
   // 削除ボタンにClass名とidを付与する関数を定義
   function addDeleteButtonId() {
-    const deletButton = createButton('削除');
-    deletButton.className = 'Delete';
-    deletButton.id = 'delete';
-    deletButton.onclick = clickDeleteButton();
-    // deletButton[0].setAttribute("id", id); //なぜエラー「Uncaught TypeError: Cannot read property 'setAttribute' of undefined」でる？
-    return deletButton;
+    const deleteButton = createButton('削除');
+    deleteButton.className = 'Delete';
+    deleteButton.id = 'delete';
+    deleteButton.onclick = clickDeleteButton();
+    // deleteButton[0].setAttribute("id", id); //なぜエラー「Uncaught TypeError: Cannot read property 'setAttribute' of undefined」でる？
+    return deleteButton;
   };
 
   // 表示するノードを組み立て（ループ処理）の関数を定義
