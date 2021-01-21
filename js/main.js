@@ -30,12 +30,12 @@
     return button;
   };
 
-  // 削除ボタンにClass名とidを付与する関数を定義
+  // 削除ボタンにClass名を付与する関数を定義
   function addDeleteButtonId() {
     const deleteButton = createButton('削除');
     deleteButton.className = 'Delete';
-    deleteButton.id = 'delete';
-    deleteButton.onclick = clickDeleteButton();
+    // deleteButton.id = 'delete';
+    deleteButton.onclick = clickDeleteButton;
     // deleteButton[0].setAttribute("id", id); //なぜエラー「Uncaught TypeError: Cannot read property 'setAttribute' of undefined」でる？
     return deleteButton;
   };
@@ -72,7 +72,6 @@
       buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）      
       comment.value = '';// 入力テキストを空にする
     };
-    // console.dir(document.getElementsByClassName('delete')); // debug用
   });
 
   // 削除ボタンClick時の処理
@@ -80,7 +79,7 @@
       const deleteClass = document.getElementsByClassName('Delete');
       for (let i = 0; i < deleteClass.length; i++) {
         deleteClass[i].addEventListener('click', e => {
-          this.closest('.ToDoList[i]').remove();
+          deleteClass[i].parentNode.parentNode.remove();
         });
       }
   };
