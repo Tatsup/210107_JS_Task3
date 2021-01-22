@@ -30,13 +30,12 @@
     return button;
   };
 
-  // 削除ボタンにClass名を付与する関数を定義
+  // 削除ボタンを定義
   function addDeleteButtonId() {
     const deleteButton = createButton('削除');
     deleteButton.className = 'Delete';
-    // deleteButton.id = 'delete';
-    deleteButton.onclick = clickDeleteButton;
-    // deleteButton[0].setAttribute("id", id); //なぜエラー「Uncaught TypeError: Cannot read property 'setAttribute' of undefined」でる？
+    deleteButton.id = 'delete';
+    deleteButton.onclick = clickDeleteButton; // Click時の処理を追加
     return deleteButton;
   };
 
@@ -69,19 +68,18 @@
     if (comment.value) { // 入力テキストに文字があった場合
       table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
       addToDo(comment.value);// ToDo追加・データ処理      
-      buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）      
+      buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）
       comment.value = '';// 入力テキストを空にする
     };
   });
-
+  
   // 削除ボタンClick時の処理
   function clickDeleteButton() {
-      const deleteClass = document.getElementsByClassName('Delete');
-      for (let i = 0; i < deleteClass.length; i++) {
-        deleteClass[i].addEventListener('click', e => {
-          deleteClass[i].parentNode.parentNode.remove();
-        });
-      }
+    const deleteToDoNode = this.parentNode.parentNode; // 削除する行の要素を取得
+    table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
+    deleteToDoNode.remove(); // Clickした要素を削除
+    aryToDo.splice(deleteToDoNode.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
+    buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）
   };
 
 
