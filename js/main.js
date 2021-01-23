@@ -39,8 +39,8 @@
     return deleteButton;
   };
 
-  // 表示するノードを組み立て（ループ処理）の関数を定義
-  function buildNodeByForeach(tempAry) {
+  // 表示するテーブルを組み立てる（ループ処理）関数を定義
+  function buildToDoListTable(tempAry) {
     aryToDo.forEach(function (value, index) {
       const tr = document.createElement('tr'); // テーブルの行要素ノードtrを作成      
       tr.className = 'ToDoList';
@@ -68,7 +68,7 @@
     if (comment.value) { // 入力テキストに文字があった場合
       table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
       addToDo(comment.value);// ToDo追加・データ処理      
-      buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）
+      buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
       comment.value = '';// 入力テキストを空にする
     };
   });
@@ -79,7 +79,7 @@
     table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
     deleteToDoNode.remove(); // Clickした要素を削除
     aryToDo.splice(deleteToDoNode.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
-    buildNodeByForeach(table);// 表示するノードを組み立て（ループ処理）
+    buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
   };
 
 
