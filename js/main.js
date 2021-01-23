@@ -31,12 +31,20 @@
   };
 
   // 削除ボタンを定義
-  function addDeleteButtonId() {
+  function addDeleteButton() {
     const deleteButton = createButton('削除');
     deleteButton.className = 'Delete';
-    deleteButton.id = 'delete';
-    deleteButton.onclick = clickDeleteButton; // Click時の処理を追加
+    // deleteButton.id = 'delete';
+    deleteButton.onclick = clickDeleteButton; // 削除ボタンClick時の処理を追加
     return deleteButton;
+  };
+
+  // 作業中ボタンを定義
+  function addWorkingButton() {
+    const WorkingButton = createButton('作業中');
+    WorkingButton.className = 'Working';
+    WorkingButton.onclick = clickWorkingButton; // 作業中（完了）ボタンClick時の処理を追加
+    return WorkingButton;
   };
 
   // 表示するテーブルを組み立てる（ループ処理）関数を定義
@@ -49,10 +57,9 @@
       // 状態ノードtrを作成
       const tdStatus = document.createElement('td'); // 状態の要素ノードを作成
       const textSpace = document.createTextNode('\t'); // スペース（空白）のテキストノードを作成
-      tdStatus.appendChild(createButton('作業中')); // ノード同士の組み立て
+      tdStatus.appendChild(addWorkingButton(index)); // ノード同士の組み立て（作業中ボタン）
       tdStatus.appendChild(textSpace); // ノード同士の組み立て
-      // tdStatus.appendChild(createButton('削除')); // ノード同士の組み立て
-      tdStatus.appendChild(addDeleteButtonId(index)); // ノード同士の組み立て
+      tdStatus.appendChild(addDeleteButton(index)); // ノード同士の組み立て（削除ボタン）
       tr.appendChild(tdStatus); // trに状態ボタンを追加
       // 作成した行ノードtrをテーブルTABLEに追加
       table.appendChild(tr);
@@ -82,6 +89,17 @@
     buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
   };
 
-
+  // 作業中（完了）ボタンClick時の処理
+  function clickWorkingButton() {
+    if (this.className == 'Working') {
+      this.textContent = '完了';
+      this.classList.remove('Working');
+      this.classList.add('Complete');
+    } else if (this.className == 'Complete') {
+        this.textContent = '作業中';
+        this.classList.remove('Complete');
+        this.classList.add('Working');
+    };
+  };
   
 }
