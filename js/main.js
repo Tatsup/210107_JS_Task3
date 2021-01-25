@@ -34,17 +34,16 @@
   function addDeleteButton() {
     const deleteButton = createButton('削除');
     deleteButton.className = 'Delete';
-    // deleteButton.id = 'delete';
     deleteButton.onclick = clickDeleteButton; // 削除ボタンClick時の処理を追加
     return deleteButton;
   };
 
   // 作業中ボタンを定義
   function addWorkingButton() {
-    const WorkingButton = createButton('作業中');
-    WorkingButton.className = 'Working';
-    WorkingButton.onclick = clickWorkingButton; // 作業中（完了）ボタンClick時の処理を追加
-    return WorkingButton;
+    const workingButton = createButton('作業中');
+    workingButton.className = 'Working';
+    workingButton.onclick = clickWorkingButton; // 作業中（完了）ボタンClick時の処理を追加
+    return workingButton;
   };
 
   // 表示するテーブルを組み立てる（ループ処理）関数を定義
