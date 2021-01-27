@@ -1,7 +1,7 @@
 'use strict';
 {  
   const table = document.getElementById('table'); // 入力テキストの出力位置取得
-  const defaultTableHtml = table.innerHTML; // テーブルを初期状態に戻す
+  const defaultTableHtml = table.innerHTML; // 初期状態（空）のtableを記憶
   const aryToDo = [];
 
   // ToDo追加（ToDoオブジェクト作成、ToDo配列追加などのデータ処理）の関数を定義
@@ -42,8 +42,16 @@
   function addWorkingButton() {
     const workingButton = createButton('作業中');
     workingButton.className = 'Working';
-    workingButton.onclick = clickWorkingButton; // 作業中（完了）ボタンClick時の処理を追加
+    workingButton.onclick = clickWorkingCompleteButton; // 作業中（完了）ボタンClick時の処理を追加
     return workingButton;
+  };
+
+  // 完了ボタンを定義
+  function addCompleteButton() {
+    const completeButton = createButton('完了');
+    completeButton.className = 'Complete';
+    completeButton.onclick = clickWorkingCompleteButton; // 作業中（完了）ボタンClick時の処理を追加
+    return completeButton;
   };
 
   // 表示するテーブルを組み立てる（ループ処理）関数を定義
@@ -56,7 +64,11 @@
       // 状態ノードtrを作成
       const tdStatus = document.createElement('td'); // 状態の要素ノードを作成
       const textSpace = document.createTextNode('\t'); // スペース（空白）のテキストノードを作成
-      tdStatus.appendChild(addWorkingButton(index)); // ノード同士の組み立て（作業中ボタン）
+      if (aryToDo[index].status === "作業中") {
+        tdStatus.appendChild(addWorkingButton(index)); // ノード同士の組み立て（作業中ボタン）
+      } else if (aryToDo[index].status === "完了") {
+        tdStatus.appendChild(addCompleteButton(index)); // ノード同士の組み立て（作業中ボタン）
+      };
       tdStatus.appendChild(textSpace); // ノード同士の組み立て
       tdStatus.appendChild(addDeleteButton(index)); // ノード同士の組み立て（削除ボタン）
       tr.appendChild(tdStatus); // trに状態ボタンを追加
@@ -78,26 +90,72 @@
       comment.value = '';// 入力テキストを空にする
     };
   });
-  
+
   // 削除ボタンClick時の処理
   function clickDeleteButton() {
-    const deleteToDoNode = this.parentNode.parentNode; // 削除する行の要素を取得
+    const deleteToDoRow = this.parentNode.parentNode; // 削除する行の要素を取得
     table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
-    deleteToDoNode.remove(); // Clickした要素を削除
-    aryToDo.splice(deleteToDoNode.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
+    // deleteToDoRow.remove(); // Clickした要素を削除
+    aryToDo.splice(deleteToDoRow.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
+    console.log(aryToDo[0].status); // debug用
     buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
   };
 
   // 作業中（完了）ボタンClick時の処理
-  function clickWorkingButton() {
+  function clickWorkingCompleteButton() {
+    const clickToDoRow = this.parentNode.parentNode; // 作業中or完了ボタンを押した行の要素を取得
+    const rowIdOfClickedButton = clickToDoRow.cells[0].firstChild.data; // Clickしたボタンの行のID
+    // console.log(aryToDo[rowIdOfClickedButton].status);  // debug用
     if (this.className == 'Working') {
       this.textContent = '完了';
       this.classList.remove('Working');
       this.classList.add('Complete');
+      aryToDo[rowIdOfClickedButton].status = "完了"; // 完了にした配列のstatusを作業中⇨完了に変更する
+      // console.log(aryToDo[rowIdOfClickedButton].status); // debug用
     } else if (this.className == 'Complete') {
         this.textContent = '作業中';
         this.classList.remove('Complete');
         this.classList.add('Working');
+        aryToDo[rowIdOfClickedButton].status = "作業中"; // 完了にした配列のstatusを作業中⇨完了に変更する
+        // console.log(aryToDo[rowIdOfClickedButton].status); // debug用
+    };
+  };
+
+  const radioButtonAll = document.getElementById('all');
+  const radioButtonWorking = document.getElementById('working');
+  const radioButtonComplete = document.getElementById('complete');
+
+  // Radioボタン（すべて）Click時の操作
+  radioButtonAll.onclick = function showAll() {
+    const toDoLists = document.getElementsByClassName('ToDoList');
+    for (let i=0; i<toDoLists.length; i++) {
+      if (toDoLists[i].style.display = "none") {
+        toDoLists[i].style.display = "";
+      }
+    }
+  };
+
+  // Radioボタン（作業中）Click時の操作
+  radioButtonWorking.onclick = function showWorking() {
+    const toDoLists = document.getElementsByClassName('ToDoList');
+    for (let i=0; i<toDoLists.length; i++) {
+      if (toDoLists[i].children[2].children[0].classList.contains('Complete')) {
+        toDoLists[i].style.display = "none";
+      } else if (toDoLists[i].children[2].children[0].classList.contains('Working')) {
+        toDoLists[i].style.display = "";
+      };
+    };
+  };
+
+  // // Radioボタン（完了）Click時の操作
+  radioButtonComplete.onclick = function showComplete() {
+    const toDoLists = document.getElementsByClassName('ToDoList');
+    for (let i=0; i<toDoLists.length; i++) {
+      if (toDoLists[i].children[2].children[0].classList.contains('Working')) {
+        toDoLists[i].style.display = "none";
+      } else if (toDoLists[i].children[2].children[0].classList.contains('Complete')) {
+        toDoLists[i].style.display = "";
+      };
     };
   };
   
