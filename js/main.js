@@ -33,24 +33,63 @@
   // 削除ボタンを定義
   function addDeleteButton() {
     const deleteButton = createButton('削除');
-    deleteButton.className = 'Delete';
-    deleteButton.onclick = clickDeleteButton; // 削除ボタンClick時の処理を追加
+    deleteButton.className = 'DeleteBottunClass';
+    // 削除ボタンClick時の処理を追加
+    deleteButton.addEventListener('click', e => {
+      const deleteToDoRow = e.target.parentNode.parentNode; // 削除する行の要素を取得
+      table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
+      aryToDo.splice(deleteToDoRow.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
+      buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
+      displayTable();
+    });
     return deleteButton;
   };
 
   // 作業中ボタンを定義
   function addWorkingButton() {
     const workingButton = createButton('作業中');
-    workingButton.className = 'Working';
-    workingButton.onclick = clickWorkingCompleteButton; // 作業中（完了）ボタンClick時の処理を追加
+    workingButton.className = 'WorkingButtonClass';
+    // 作業中（完了）ボタンClick時の処理を追加
+    workingButton.addEventListener('click', e => {
+      const clickToDoRow = e.target.parentNode.parentNode; // 作業中or完了ボタンを押した行の要素を取得
+      const rowIdOfClickedButton = clickToDoRow.cells[0].firstChild.data; // Clickしたボタンの行のID
+      if (e.target.className == 'WorkingButtonClass') {
+        e.target.textContent = '完了';
+        e.target.classList.remove('WorkingButtonClass');
+        e.target.classList.add('CompleteButtonClass');
+        aryToDo[rowIdOfClickedButton].status = "完了"; // 完了にした配列のstatusを作業中⇨完了に変更する
+      } else if (e.target.className == 'CompleteButtonClass') {
+          e.target.textContent = '作業中';
+          e.target.classList.remove('CompleteButtonClass');
+          e.target.classList.add('WorkingButtonClass');
+          aryToDo[rowIdOfClickedButton].status = "作業中"; // 完了にした配列のstatusを作業中⇨完了に変更する
+      };
+      displayTable();
+    });
     return workingButton;
   };
-
+  
   // 完了ボタンを定義
   function addCompleteButton() {
     const completeButton = createButton('完了');
-    completeButton.className = 'Complete';
-    completeButton.onclick = clickWorkingCompleteButton; // 作業中（完了）ボタンClick時の処理を追加
+    completeButton.className = 'CompleteButtonClass';
+    // 作業中（完了）ボタンClick時の処理を追加
+    completeButton.addEventListener('click', e => {
+      const clickToDoRow = e.target.parentNode.parentNode; // 作業中or完了ボタンを押した行の要素を取得
+      const rowIdOfClickedButton = clickToDoRow.cells[0].firstChild.data; // Clickしたボタンの行のID
+      if (e.target.className == 'WorkingButtonClass') {
+        e.target.textContent = '完了';
+        e.target.classList.remove('WorkingButtonClass');
+        e.target.classList.add('CompleteButtonClass');
+        aryToDo[rowIdOfClickedButton].status = "完了"; // 完了にした配列のstatusを作業中⇨完了に変更する
+      } else if (e.target.className == 'CompleteButtonClass') {
+          e.target.textContent = '作業中';
+          e.target.classList.remove('CompleteButtonClass');
+          e.target.classList.add('WorkingButtonClass');
+          aryToDo[rowIdOfClickedButton].status = "作業中"; // 完了にした配列のstatusを作業中⇨完了に変更する
+      };
+      displayTable();
+    });
     return completeButton;
   };
 
@@ -89,74 +128,53 @@
       buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
       comment.value = '';// 入力テキストを空にする
     };
+    displayTable();
+  });
+  
+  // Radioボタン（すべて）CheckにChange時の操作
+  const radioButtonAll = document.getElementById('all');
+  radioButtonAll.addEventListener('change', function() {
+    displayTable();
+  });
+    
+    // Radioボタン（作業中）CheckにChange時時の操作
+  const radioButtonWorking = document.getElementById('working');
+  radioButtonWorking.addEventListener('change', function() {
+    displayTable();
   });
 
-  // 削除ボタンClick時の処理
-  function clickDeleteButton() {
-    const deleteToDoRow = this.parentNode.parentNode; // 削除する行の要素を取得
-    table.innerHTML = defaultTableHtml; // テーブルを初期状態に戻す
-    // deleteToDoRow.remove(); // Clickした要素を削除
-    aryToDo.splice(deleteToDoRow.cells[0].firstChild.data, 1); // 配列の要素を削除（開始位置, 要素数）
-    console.log(aryToDo[0].status); // debug用
-    buildToDoListTable(table);// 表示するノードを組み立て（ループ処理）
-  };
-
-  // 作業中（完了）ボタンClick時の処理
-  function clickWorkingCompleteButton() {
-    const clickToDoRow = this.parentNode.parentNode; // 作業中or完了ボタンを押した行の要素を取得
-    const rowIdOfClickedButton = clickToDoRow.cells[0].firstChild.data; // Clickしたボタンの行のID
-    // console.log(aryToDo[rowIdOfClickedButton].status);  // debug用
-    if (this.className == 'Working') {
-      this.textContent = '完了';
-      this.classList.remove('Working');
-      this.classList.add('Complete');
-      aryToDo[rowIdOfClickedButton].status = "完了"; // 完了にした配列のstatusを作業中⇨完了に変更する
-      // console.log(aryToDo[rowIdOfClickedButton].status); // debug用
-    } else if (this.className == 'Complete') {
-        this.textContent = '作業中';
-        this.classList.remove('Complete');
-        this.classList.add('Working');
-        aryToDo[rowIdOfClickedButton].status = "作業中"; // 完了にした配列のstatusを作業中⇨完了に変更する
-        // console.log(aryToDo[rowIdOfClickedButton].status); // debug用
-    };
-  };
-
-  const radioButtonAll = document.getElementById('all');
-  const radioButtonWorking = document.getElementById('working');
+  // Radioボタン（完了）CheckにChange時時の操作
   const radioButtonComplete = document.getElementById('complete');
-
-  // Radioボタン（すべて）Click時の操作
-  radioButtonAll.onclick = function showAll() {
-    const toDoLists = document.getElementsByClassName('ToDoList');
-    for (let i=0; i<toDoLists.length; i++) {
-      if (toDoLists[i].style.display = "none") {
-        toDoLists[i].style.display = "";
-      }
-    }
-  };
-
-  // Radioボタン（作業中）Click時の操作
-  radioButtonWorking.onclick = function showWorking() {
-    const toDoLists = document.getElementsByClassName('ToDoList');
-    for (let i=0; i<toDoLists.length; i++) {
-      if (toDoLists[i].children[2].children[0].classList.contains('Complete')) {
-        toDoLists[i].style.display = "none";
-      } else if (toDoLists[i].children[2].children[0].classList.contains('Working')) {
-        toDoLists[i].style.display = "";
-      };
-    };
-  };
-
-  // // Radioボタン（完了）Click時の操作
-  radioButtonComplete.onclick = function showComplete() {
-    const toDoLists = document.getElementsByClassName('ToDoList');
-    for (let i=0; i<toDoLists.length; i++) {
-      if (toDoLists[i].children[2].children[0].classList.contains('Working')) {
-        toDoLists[i].style.display = "none";
-      } else if (toDoLists[i].children[2].children[0].classList.contains('Complete')) {
-        toDoLists[i].style.display = "";
-      };
-    };
-  };
+  radioButtonComplete.addEventListener('change', function() {
+    displayTable();
+  });
   
+  // 選択したRadioボタンによってToDoリスト表示を切り替える関数を定義
+  function displayTable() {
+    const toDoLists = document.getElementsByClassName('ToDoList');
+    if (radioButtonAll.checked) {
+      for (let i=0; i<toDoLists.length; i++) {
+        if (toDoLists[i].style.display = "none") {
+          toDoLists[i].style.display = "";
+        }
+      }
+    } else if (radioButtonWorking.checked) {
+      for (let i=0; i<toDoLists.length; i++) {
+        if (toDoLists[i].children[2].children[0].classList.contains('CompleteButtonClass')) {
+          toDoLists[i].style.display = "none";
+        } else if (toDoLists[i].children[2].children[0].classList.contains('WorkingButtonClass')) {
+          toDoLists[i].style.display = "";
+        };
+      };
+    } else if (radioButtonComplete.checked) {
+      for (let i=0; i<toDoLists.length; i++) {
+        if (toDoLists[i].children[2].children[0].classList.contains('WorkingButtonClass')) {
+          toDoLists[i].style.display = "none";
+        } else if (toDoLists[i].children[2].children[0].classList.contains('CompleteButtonClass')) {
+          toDoLists[i].style.display = "";
+        };
+      };
+    };
+  };
+
 }
