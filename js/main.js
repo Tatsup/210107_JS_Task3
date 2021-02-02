@@ -33,7 +33,7 @@
   // 削除ボタンを定義
   function addDeleteButton() {
     const deleteButton = createButton('削除');
-    deleteButton.className = 'DeleteBottunClass';
+    deleteButton.className = 'DeleteButtonClass';
     // 削除ボタンClick時の処理を追加
     deleteButton.addEventListener('click', e => {
       const deleteToDoRow = e.target.parentNode.parentNode; // 削除する行の要素を取得
@@ -53,12 +53,12 @@
     workingButton.addEventListener('click', e => {
       const clickToDoRow = e.target.parentNode.parentNode; // 作業中or完了ボタンを押した行の要素を取得
       const rowIdOfClickedButton = clickToDoRow.cells[0].firstChild.data; // Clickしたボタンの行のID
-      if (e.target.className == 'WorkingButtonClass') {
+      if (e.target.className === 'WorkingButtonClass') {
         e.target.textContent = '完了';
         e.target.classList.remove('WorkingButtonClass');
         e.target.classList.add('CompleteButtonClass');
         aryToDo[rowIdOfClickedButton].status = "完了"; // 完了にした配列のstatusを作業中⇨完了に変更する
-      } else if (e.target.className == 'CompleteButtonClass') {
+      } else if (e.target.className === 'CompleteButtonClass') {
           e.target.textContent = '作業中';
           e.target.classList.remove('CompleteButtonClass');
           e.target.classList.add('WorkingButtonClass');
@@ -133,21 +133,15 @@
   
   // Radioボタン（すべて）CheckにChange時の操作
   const radioButtonAll = document.getElementById('all');
-  radioButtonAll.addEventListener('change', function() {
-    displayTable();
-  });
+  radioButtonAll.addEventListener('change', displayTable);
     
     // Radioボタン（作業中）CheckにChange時時の操作
   const radioButtonWorking = document.getElementById('working');
-  radioButtonWorking.addEventListener('change', function() {
-    displayTable();
-  });
+  radioButtonWorking.addEventListener('change', displayTable);
 
   // Radioボタン（完了）CheckにChange時時の操作
   const radioButtonComplete = document.getElementById('complete');
-  radioButtonComplete.addEventListener('change', function() {
-    displayTable();
-  });
+  radioButtonComplete.addEventListener('change', displayTable);
   
   // 選択したRadioボタンによってToDoリスト表示を切り替える関数を定義
   function displayTable() {
